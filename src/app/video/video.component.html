@@ -1,0 +1,56 @@
+<div class="row">
+<div class="video-player">
+    <iframe class="yt-player" [src]="url" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    <h5 class="title"> {{video.name}} </h5>
+    <div class="video-details">
+        <div class="line views"> {{video.views}} views</div>
+        <div class="line likes">
+            <img (click)="like()" width="20px" src="../../assets/img/like.png">&nbsp;{{video.likes}}
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <img (click)="dislike()" width="20px" src="../../assets/img/dislike.png">&nbsp;{{video.dislikes}}
+        </div> 
+    </div>
+    <br>
+    <div class="channel"><img src={{video.avatar}} class="channel-img">{{video.channel}}</div>
+    <br>
+    <div class="comments-title">Description : {{video.description}} </div>
+    <br>
+    <div class="comments-title">Comments :</div>
+    <br>
+    <form class="row" *ngIf="activeUser != ''" #comment="ngForm" (ngSubmit)="addComment(comment.value)">
+        <label class="comment-label" for="comment"><h5> {{activeUser}} : </h5></label>
+        <input class="comment" required ngModel name="comment" #commtext="ngModel" placeholder="write a comment here...">
+
+        <div class="alert alert-danger" *ngIf="commtext.touched && !commtext.valid && commtext.errors">
+            <div *ngIf="commtext.errors['required']">Comment is required!</div>
+        </div>
+        <button type="submit" class="post btn-primary" [disabled]="!comment.valid">Post</button>
+    </form>
+    <br>
+    <div class="comments" *ngFor = "let comment of video.comments">
+        <button *ngIf="video.user == activeUserEmail" (click)="deleteComment(comment)" class="post btn-danger">Delete</button> 
+        {{comment}}
+        <br>
+        <br>
+    </div>
+</div> 
+
+<div class="recommendation">
+    <h4>Recommendations :</h4>
+    <div class="col">
+        <div class="card" *ngFor="let r of recommendations">
+            <img (click)="getVideo(r)" [src]="'https://img.youtube.com/vi/' + r.id +'/mqdefault.jpg'">
+
+            <b class="recommendation-title">{{r.name.substring(0, 70)}}<b *ngIf="r.name.length > 50">...</b></b>            
+
+            <div>
+                <b class="recommendation-channel"><img src={{r.avatar}} class="channel-img-recom">{{r.channel}}</b>
+                <b class="recommendation-views">{{r.views}} Views</b>
+            </div>
+
+            <!-- <div (click)="getVideo(r)" class="name">{{r.name.substring(0, 70)}}...</div> -->
+        </div>
+    </div>
+</div>
+
+</div>
